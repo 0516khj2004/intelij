@@ -1,13 +1,13 @@
 package com.example.demo.dao;
 
 import com.example.demo.entity.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.List;
 
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class UserDaoServiceTests{
     UserDaoService userDaoService = new UserDaoService();
@@ -16,7 +16,7 @@ class UserDaoServiceTests{
     public void testUserList(){
         List<User> list = userDaoService.getUserList();
         assertEquals(3, list.size());
-        assertTrue(list.size() == 3, "초기사용자는 3명 ");
+//        assertTrue(list.size() == 3, "초기사용자는 3명 ");
     }
 
     @Test
