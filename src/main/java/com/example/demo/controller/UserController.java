@@ -10,12 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 //
@@ -74,6 +75,40 @@ public class UserController {
         mapping.setFilters(provider);
 
         return  mapping;
+    }
+    //추가
+    @PostMapping("/users")
+    public ResponseEntity<User> create(@Valid @RequestBody User user){
+        User createUser = userDaoService.save(user);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createUser.getId())
+                .toUri();
+
+
+        return  ResponseEntity.created(location).build();
+    }
+
+    //삭제
+    @DeleteMapping("/users/{id}")
+    public void delete(@PathVariable Integer id){
+        User user = userDaoService.delete(id);
+    }
+
+    //update
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User user){
+        User updateUser = userDaoService.update(userDaoService.getUser(id));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("")
+                .buildAndExpand(updateUser.getId())
+                .toUri();
+
+        return  ResponseEntity.created(location).build();
     }
 
     @GetMapping("/admin/users/{id}")
